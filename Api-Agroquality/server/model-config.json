@@ -1,0 +1,65 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "User": {
+    "dataSource": "dbmongo"
+  },
+  "AccessToken": {
+    "dataSource": "dbmongo",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "dbmongo",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "dbmongo",
+    "public": false,
+    "options": {
+      "strictObjectIDCoercion": true
+    }
+  },
+  "Role": {
+    "dataSource": "dbmongo",
+    "public": false
+  },
+  "usuario": {
+    "dataSource": "dbmongo",
+    "public": true
+  },
+  "aplicativo": {
+    "dataSource": "dbmongo",
+    "public": true
+  },
+  "Email": {
+    "dataSource": "Email"
+  },
+  "etapa": {
+    "dataSource": "dbmongo",
+    "public": true
+  },
+  "variavel": {
+    "dataSource": "dbmongo",
+    "public": true
+  },
+  "cultura": {
+    "dataSource": "dbmongo",
+    "public": true
+  },
+  "validacao": {
+    "dataSource": "dbmongo",
+    "public": true
+  }
+}

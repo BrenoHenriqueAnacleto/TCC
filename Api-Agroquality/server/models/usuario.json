@@ -1,0 +1,243 @@
+{
+  "name": "usuario",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "nome": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "string",
+      "required": true
+    },
+    "telefone": {
+      "type": "string",
+      "required": true
+    },
+    "administrador": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "superUsuario": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "excluido": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "aplicativo": {
+      "type": "hasOne",
+      "model": "aplicativo",
+      "foreignKey": "aplicativoId"
+    }
+  },
+  "acls": [
+    {
+      "principalType": "ROLE",
+      "principalId": "$unautheticated",
+      "permission": "ALLOW",
+      "property": "sendEmail"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$unautheticated",
+      "permission": "ALLOW",
+      "property": "updateForgetPassword"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "administradores"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "administrador"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "novoAdministrador"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "removerAdministrador"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "superusuarios"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "superusuario"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "novoSuperUsuario"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "removerSuperUsuario"
+    }
+  ],
+  "methods": {
+    "novoAdministrador": {
+      "accepts": [
+        {
+          "arg": "data",
+          "type": "object",
+          "required": false,
+          "description": "São os dados do administrador",
+          "http": {
+            "source": "context"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "msg",
+          "type": "string",
+          "root": false,
+          "description": "Msg de sucesso ou erro"
+        },
+        {
+          "arg": "err",
+          "type": "any",
+          "root": false,
+          "description": "erro"
+        }
+      ],
+      "description": "Adiciona um novo usuario",
+      "http": [
+        {
+          "path": "/novo-administrador",
+          "verb": "post"
+        },
+        {
+          "path": "/editar-administrador",
+          "verb": "put"
+        }
+      ]
+    },
+    "removerAdministrador": {
+      "accepts": [
+        {
+          "arg": "id",
+          "type": "string",
+          "required": false,
+          "description": "Id do administrador"
+        }
+      ],
+      "returns": [
+        {
+          "arg": "msg",
+          "type": "string",
+          "root": false,
+          "description": ""
+        }
+      ],
+      "description": "Realiza a exclusão lógica do admnistrador",
+      "http": [
+        {
+          "path": "/remover-administrador",
+          "verb": "delete"
+        }
+      ]
+    },
+    "novoSuperUsuario": {
+      "accepts": [
+        {
+          "arg": "data",
+          "type": "object",
+          "required": false,
+          "description": "São os dados do super usuario",
+          "http": {
+            "source": "context"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "msg",
+          "type": "string",
+          "root": false,
+          "description": "Msg de sucesso ou erro"
+        },
+        {
+          "arg": "err",
+          "type": "any",
+          "root": false,
+          "description": "erro"
+        }
+      ],
+      "description": "Adiciona um novo super usuario",
+      "http": [
+        {
+          "path": "/novo-superusuario",
+          "verb": "post"
+        },
+        {
+          "path": "/editar-superusuario",
+          "verb": "put"
+        }
+      ]
+    },
+    "removerSuperUsuario": {
+      "accepts": [
+        {
+          "arg": "id",
+          "type": "string",
+          "required": false,
+          "description": "Id do super usuario"
+        }
+      ],
+      "returns": [
+        {
+          "arg": "msg",
+          "type": "string",
+          "root": false,
+          "description": ""
+        }
+      ],
+      "description": "Realiza a exclusão lógica do super usuario",
+      "http": [
+        {
+          "path": "/remover-superusuario",
+          "verb": "delete"
+        }
+      ]
+    }
+  }
+}

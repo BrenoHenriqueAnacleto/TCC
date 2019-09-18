@@ -1,0 +1,29 @@
+{
+  "name": "aplicativo",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "nome": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "usuarios": {
+      "type": "hasMany",
+      "model": "usuario",
+      "foreignKey": ""
+    },
+    "etapas": {
+      "type": "hasMany",
+      "model": "etapa",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

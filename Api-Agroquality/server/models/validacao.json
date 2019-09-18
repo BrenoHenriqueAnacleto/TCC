@@ -1,0 +1,26 @@
+{
+  "name": "validacao",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "tipoValidacao": {
+      "type": "string",
+      "required": true
+    },
+    "valorPadrao": {
+      "type": "string"
+    },
+    "intervaloDeQualidade": {
+      "type": [
+        "object"
+      ]
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

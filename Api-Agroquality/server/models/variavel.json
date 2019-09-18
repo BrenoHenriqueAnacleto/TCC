@@ -1,0 +1,38 @@
+{
+  "name": "variavel",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "placeholder": {
+      "type": "string"
+    },
+    "valorDefault": {
+      "type": "string"
+    },
+    "tipoDoCampo": {
+      "type": "string",
+      "required": true
+    },
+    "obrigatorio": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "validacoes": {
+      "type": "hasMany",
+      "model": "validacao",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

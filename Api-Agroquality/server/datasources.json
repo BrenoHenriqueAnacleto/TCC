@@ -1,0 +1,42 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "db_agroquality": {
+    "host": "localhost",
+    "port": 5432,
+    "url": "",
+    "database": "Agroquality",
+    "password": "123",
+    "name": "db_agroquality",
+    "user": "postgres",
+    "connector": "postgresql"
+  },
+  "dbmongo": {
+    "host": "127.0.0.1",
+    "port": 27017,
+    "url": "",
+    "database": "agroquality",
+    "password": "",
+    "name": "dbmongo",
+    "user": "",
+    "connector": "mongodb"
+  },
+  "Email": {
+    "name": "Email",
+    "connector": "mail",
+    "transports": [
+      {
+        "type": "SMTP",
+        "host": "smtp.gmail.com",
+        "secure": true,
+        "port": 465,
+        "auth": {
+          "user": "sistema.agroquality@gmail.com",
+          "pass": "Agr0qu@l1ty"
+        }
+      }
+    ]
+  }
+}

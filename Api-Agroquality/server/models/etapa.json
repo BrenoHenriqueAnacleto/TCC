@@ -1,0 +1,29 @@
+{
+  "name": "etapa",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "nome": {
+      "type": "string",
+      "required": true
+    },
+    "excluido": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "variaveis": {
+      "type": "hasMany",
+      "model": "variavel",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
