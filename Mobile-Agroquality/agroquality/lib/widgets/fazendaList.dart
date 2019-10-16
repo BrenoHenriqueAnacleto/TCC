@@ -7,28 +7,21 @@ import 'package:agroquality/screens/talhao.dart';
 import 'package:agroquality/constants.dart';
 import 'package:dio/dio.dart';
 
-
 class FazendaList extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() => FazendaListState();
 }
 
 class FazendaListState extends State {
   List<Fazenda> fazendas;
-  int count = 0;
+
   @override
   Widget build(BuildContext context) {
-    // if (fazendas == null) {
-    //   fazendas = List<Fazenda>();
-    //   fazendasUsuario();
-    //   getData();
-    // }
     return Scaffold(
       body: fazendaListItems(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          navegarFormularioFazenda(Fazenda('', 0));
+          navegarFormularioFazenda(Fazenda());
         },
         tooltip: "Adicionar nova fazenda",
         child: new Icon(Icons.add),
@@ -39,100 +32,96 @@ class FazendaListState extends State {
 
   FutureBuilder fazendaListItems() {
     return FutureBuilder(
-    future: fazendasUsuario(),
-    builder: (context, projectSnap) {
-      if (projectSnap.connectionState == ConnectionState.none ||
-          projectSnap.data == null) {
-        return Container(
-            height: 200.0,
-            alignment: Alignment.center,
-            child: Text('Nenhuma fazenda encontrada',
-                  style: TextStyle(color: Colors.black,fontSize: 16.0)
-            ),
-          );
-      } else if(projectSnap.connectionState == ConnectionState.waiting){
-          return Container(
-            height: 200.0,
-            alignment: Alignment.center,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-            ),
-          );
-      } else {
-        return ListView.builder(
-        itemCount: projectSnap.data?.length,
-        itemBuilder: (BuildContext context, int position) {
-          return 
-          Dismissible(
-            key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
-            background: Container(
-              color: Colors.red,
-              child: Align(
-                alignment: Alignment(0.9, 0.0),
-                child: Icon(Icons.delete, color: Colors.white,),
+        future: fazendasUsuario(),
+        builder: (context, dados) {
+          if (dados.connectionState == ConnectionState.none ||
+              dados.data == null) {
+            return Container(
+              height: 200.0,
+              alignment: Alignment.center,
+              child: Text('Nenhuma fazenda encontrada',
+                  style: TextStyle(color: Colors.black, fontSize: 16.0)),
+            );
+          } else if (dados.connectionState == ConnectionState.waiting) {
+            return Container(
+              height: 200.0,
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
               ),
-            ),
-            direction: DismissDirection.endToStart,
-            child: 
-              Center(
-                child:Card(
-                  elevation: 6,
-                  child: Container(
-                      height: 100,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Row(
+            );
+          } else {
+            return ListView.builder(
+              itemCount: dados.data.length,
+              itemBuilder: (BuildContext context, int position) {
+                return Dismissible(
+                  key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
+                  background: Container(
+                    color: Colors.red,
+                    child: Align(
+                      alignment: Alignment(0.9, 0.0),
+                      child: Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  direction: DismissDirection.endToStart,
+                  child: Center(
+                      child: Card(
+                          elevation: 6,
+                          child: Container(
+                              height: 100,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Text(this.fazendas[position].nome),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Column(
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      FlatButton.icon(
-                                        color: Colors.white10,
-                                        icon: Icon(Icons.edit),
-                                        label: Text('Editar'),
-                                        onPressed: () {
-                                          navegarFormularioFazenda(this.fazendas[position]);
-                                        }
-                                      )
-                                    ], 
+                                      Text(dados.data[position].nome),
+                                    ],
                                   ),
-                                  Column(
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      FlatButton.icon(
-                                        color: Colors.white10,
-                                        icon: Icon(Icons.layers),
-                                        label: Text('Talhões'),
-                                        onPressed: () {
-                                          navegarPaginaTalhao(this.fazendas[position]);
-                                        }
-                                      )
-                                    ], 
-                                  ),
+                                      Column(
+                                        children: <Widget>[
+                                          FlatButton.icon(
+                                              color: Colors.white10,
+                                              icon: Icon(Icons.edit),
+                                              label: Text('Editar'),
+                                              onPressed: () {
+                                                navegarFormularioFazenda(
+                                                    dados.data[position]);
+                                              })
+                                        ],
+                                      ),
+                                      Column(
+                                        children: <Widget>[
+                                          FlatButton.icon(
+                                              color: Colors.white10,
+                                              icon: Icon(Icons.layers),
+                                              label: Text('Talhões'),
+                                              onPressed: () {
+                                                navegarPaginaTalhao(
+                                                    dados.data[position]);
+                                              })
+                                        ],
+                                      ),
+                                    ],
+                                  )
                                 ],
-                              )
-                            ],
-                          )
-                    )
-                  )
-              ),
-              confirmDismiss: (direction) {
-                _confirmarExclusao(this.fazendas[position]);
+                              )))),
+                  confirmDismiss: (direction) {
+                    _confirmarExclusao(dados.data[position]);
+                  },
+                );
               },
-          ); 
-        },
-      );
-    }
+            );
+          }
+        });
   }
-);
-}
 
   void _confirmarExclusao(Fazenda fazenda) {
     showDialog(
@@ -162,53 +151,82 @@ class FazendaListState extends State {
     );
   }
 
-    fazendasUsuario() async {
+  fazendasUsuario() async {
+    final AuthTableModel authTableModel = new AuthTableModel();
+    final List<dynamic> auths = await authTableModel.getAuths();
 
-      final AuthTableModel authTableModel = new AuthTableModel();
-      final List<dynamic> auths = await authTableModel.getAuths();
+    Map enviroment = environment();
+    String token = auths[0]['id'];
+    String url = enviroment['apiUrl'] +
+        '/usuarios/' +
+        auths[0]['userId'] +
+        '/fazendas?access_token=' +
+        token;
 
-      Map enviroment = environment();
-      String url     = enviroment['apiUrl'] + '/usuarios/'+ auths[0]['userId'] +'/fazendas';
+    var response = await Dio().get(url);
 
-      var response = await Dio().get(url);
-      print(response);
-      return response.data;
-    }
+    List<dynamic> fazendas = new List<dynamic>();
+    Fazenda fazenda = new Fazenda();
+    response.data.forEach((element) => fazendas.add(fazenda.fromMap(element)));
 
-  void deletarFazenda(Fazenda fazenda) async {
-
-        // Navigator.pop(context, true);
-
-        // if (fazenda.id == null) {
-        //   return;
-        // }
-        // var result = await helper.deleteFazenda(fazenda.id);
-       
-        // if (result != 0) {
-        //   AlertDialog alertDialog = AlertDialog(
-        //     title: Text("Fazenda deletada"),
-        //     content: Text("A fazenda foi deletada"),
-        //   );
-        //   showDialog(context: context, builder: (_) => alertDialog);
-        // }
-        // getData();
+    return fazendas;
   }
 
-  void navegarFormularioFazenda(Fazenda fazenda) async {
-    bool result = await Navigator.push(
+  void deletarFazenda(Fazenda fazenda) async {
+    Navigator.pop(context, true);
+
+    if (fazenda.id == null) {
+      return;
+    }
+
+    final AuthTableModel authTableModel = new AuthTableModel();
+    final List<dynamic> auths = await authTableModel.getAuths();
+
+    Map enviroment = environment();
+
+    String userId = auths[0]['userId'];
+    String token = auths[0]['id'];
+    String idFazenda = fazenda.id;
+    String url = enviroment['apiUrl'] +
+        '/usuarios/' +
+        userId +
+        '/fazendas/' +
+        idFazenda +
+        '?access_token=' +
+        token;
+
+    var dio = Dio();
+    var response = await dio.delete(url);
+
+    if (response.statusCode == 204 || response.statusCode == 200) {
+      AlertDialog alertDialog = AlertDialog(
+        title: Text("Fazenda deletada"),
+        content: Text("A fazenda foi deletada"),
+      );
+      showDialog(context: context, builder: (_) => alertDialog);
+      setState(() {
+        fazendaListItems();
+      });
+    } else {
+      AlertDialog alertDialog = AlertDialog(
+        title: Text("Ocorreu um erro :("),
+        content: Text("Por favor tente novamente"),
+      );
+      showDialog(context: context, builder: (_) => alertDialog);
+    }
+  }
+
+  void navegarFormularioFazenda(dynamic fazenda) async {
+    await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => FazendaForm(fazenda)),
     );
-    if (result == true) {
-      // getData();
-    }
   }
 
-  void navegarPaginaTalhao(Fazenda fazenda){
+  void navegarPaginaTalhao(Fazenda fazenda) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => TalhaoPage(fazenda)),
     );
   }
-
 }

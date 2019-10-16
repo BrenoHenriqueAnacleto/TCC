@@ -58,7 +58,11 @@
     "dataSource": "dbmongo",
     "public": true
   },
-  "validacao": {
+  "fazenda": {
+    "dataSource": "dbmongo",
+    "public": true
+  },
+  "talhao": {
     "dataSource": "dbmongo",
     "public": true
   }

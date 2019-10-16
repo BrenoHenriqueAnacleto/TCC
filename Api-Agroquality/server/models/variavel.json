@@ -23,16 +23,13 @@
     "obrigatorio": {
       "type": "string",
       "required": true
+    },
+    "validacoes": {
+      "type": "array"
     }
   },
   "validations": [],
-  "relations": {
-    "validacoes": {
-      "type": "hasMany",
-      "model": "validacao",
-      "foreignKey": ""
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }

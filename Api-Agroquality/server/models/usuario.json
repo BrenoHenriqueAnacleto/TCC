@@ -40,9 +40,20 @@
       "type": "hasOne",
       "model": "aplicativo",
       "foreignKey": "aplicativoId"
+    },
+    "fazendas": {
+      "type": "hasMany",
+      "model": "fazenda",
+      "foreignKey": ""
     }
   },
   "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    },
     {
       "principalType": "ROLE",
       "principalId": "$unautheticated",

@@ -1,22 +1,22 @@
 {
-  "name": "validacao",
+  "name": "talhao",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "tipoValidacao": {
+    "identificacaoDoTalhao": {
       "type": "string",
       "required": true
     },
-    "valorPadrao": {
-      "type": "string"
+    "tamanhoDoTalhao": {
+      "type": "string",
+      "required": true
     },
-    "intervaloDeQualidade": {
-      "type": [
-        "object"
-      ]
+    "cultura": {
+      "type": "string",
+      "required": true
     }
   },
   "validations": [],
