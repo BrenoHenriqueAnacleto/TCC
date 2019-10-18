@@ -26,15 +26,7 @@ class TalhaoPageState extends State {
   return Scaffold(
       appBar: AppBar(
         title: Text('Talhões'),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            semanticLabel: 'voltar',
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
+          centerTitle: true,
       ),
       body:TalhaoList(fazenda),
     );

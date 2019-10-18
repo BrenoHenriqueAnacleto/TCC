@@ -1,6 +1,9 @@
+import 'package:agroquality/models/etapaModel.dart';
 import 'package:agroquality/models/talhaoModel.dart';
+import 'package:agroquality/tableModels/authTableModel.dart';
 import 'package:flutter/material.dart';
-import 'package:agroquality/colors.dart';
+import 'package:agroquality/constants.dart';
+import 'package:dio/dio.dart';
 
 class VariavelPage extends StatefulWidget {
   final Talhao talhao;
@@ -19,63 +22,77 @@ class VariavelPageState extends State {
 
   @override
   Widget build(BuildContext context) {
-  return MaterialApp(
-      theme: _agroqualityTheme,
-      home: DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            bottom: TabBar(
-             indicatorColor: Color(0xFFFFFBFA), 
-              tabs: [
-                Tab(
-                  text:'Plantio',
-                ),
-                Tab(
-                  text:'Pulverização',
-                ),
-                Tab(
-                  text:'Colheita',
-                ),
-              ],
-         ),
-          leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            semanticLabel: 'voltar',
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-            title: Text('Variáveis'),
-          ),
-          body: TabBarView(
-            children: [
-            ],
-          ),
-        ),
-      ),
+    return FutureBuilder(
+      future: etapasAplicativo(),
+      builder: (context, dados) {
+        if (dados.connectionState == ConnectionState.none ||
+              dados.data == null) {
+          return Container(
+              height: 200.0,
+              color: Colors.white,
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+              ),
+            );
+        } else if (dados.connectionState == ConnectionState.waiting) {
+          return Container(
+              height: 200.0,
+              color: Colors.white,
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+              ),
+            );
+        } else {
+          return DefaultTabController(
+            length: dados.data.length,
+            child: Scaffold(
+              appBar: AppBar(
+                title:Text('Etapas'),
+                centerTitle: true,
+                bottom: 
+                TabBar(
+                indicatorColor: Color(0xFFFFFBFA),
+                tabs: dados.data
+                )
+              ),
+              body: Container()
+          ));
+        }
+      }
     );
-    }
-}
-final ThemeData _agroqualityTheme = _buildAgroqualityTheme();
+  }
+ 
+  etapasAplicativo() async{
 
-ThemeData _buildAgroqualityTheme() {
-  final ThemeData base = ThemeData.light();
-  return base.copyWith(
-    accentColor: amareloJohnDeere,
-    primaryColor: verdeJohnDeere,
-    buttonTheme: base.buttonTheme.copyWith(
-      buttonColor: amareloJohnDeere,
-      textTheme: ButtonTextTheme.normal,
-    ),
-    floatingActionButtonTheme: base.floatingActionButtonTheme.copyWith(
-      backgroundColor: verdeJohnDeere
-    ),
-    scaffoldBackgroundColor: agroqualityBackgroundWhite,
-    cardColor: agroqualitySurfaceWhite,
-    textSelectionColor: verdeJohnDeere,
-    errorColor: vermelhoJohnDeere,
-  );
+    final AuthTableModel authTableModel = new AuthTableModel();
+    final List<dynamic> auths = await authTableModel.getAuths();
+
+    Map enviroment = environment();
+
+    String token = auths[0]['id'];
+    String url = enviroment['apiUrl'] +
+        '/aplicativos/' +
+        idAplicativo +
+        '/etapas' +
+        '?access_token=' +
+        token;
+
+    var dio = Dio();
+    var response = await dio.get(url);
+
+    List<dynamic> etapas = new List<dynamic>();
+    Etapa etapa = new Etapa();
+    response.data.forEach((element) => etapas.add(etapa.fromMap(element)));
+
+    List<Tab> tabs = new List<Tab>();
+    List<TabBarView> tabsViews = new List<TabBarView>();
+  
+    etapas.forEach((valor) => tabs.add(new Tab(text: valor.nome)));
+    
+    // etapas.forEach((valor) => tabsViews.add());
+
+    return tabs;
+  }
 }

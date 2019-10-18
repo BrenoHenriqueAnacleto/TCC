@@ -23,10 +23,10 @@ class Talhao {
   Talhao fromMap(Map<String, dynamic> mapa) {
     Talhao talhao = new Talhao();
 
-    talhao.identificadorDoTalhao = mapa['identificadorDoTalhao'];
+    talhao.identificadorDoTalhao = mapa['identificacaoDoTalhao'];
     talhao.id = mapa['id'];
     talhao.cultura = mapa['cultura'];
-    talhao.tamanhoDoTalhao = mapa['tamanhoDoTalhao'];
+    talhao.tamanhoDoTalhao = double.parse(mapa['tamanhoDoTalhao']);
     talhao.fazendaId = mapa['fazendaId'];
     return talhao;
   }

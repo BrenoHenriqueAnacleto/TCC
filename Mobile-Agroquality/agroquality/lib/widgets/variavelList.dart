@@ -1,47 +1,43 @@
-import 'package:agroquality/forms/talhaoForm.dart';
-import 'package:agroquality/models/fazendaModel.dart';
+import 'package:agroquality/models/etapaModel.dart';
+import 'package:agroquality/models/variavelModel.dart';
 import 'package:agroquality/tableModels/authTableModel.dart';
 import 'package:flutter/material.dart';
-import 'package:agroquality/models/talhaoModel.dart';
-import 'package:agroquality/screens/variavel.dart';
 
 import 'package:agroquality/constants.dart';
 import 'package:dio/dio.dart';
 
-class TalhaoList extends StatefulWidget {
-  final Fazenda fazenda;
-  TalhaoList(this.fazenda);
+class VariavelList extends StatefulWidget {
+  final Etapa etapa;
+  VariavelList(this.etapa);
   @override
-  State<StatefulWidget> createState() => TalhaoListState(fazenda);
+  State<StatefulWidget> createState() => VariavelListState(etapa);
 }
 
-class TalhaoListState extends State {
-  Fazenda fazenda;
+class VariavelListState extends State {
 
-  TalhaoListState(Fazenda fazenda) {
-    this.fazenda = fazenda;
+  Etapa  etapa; 
+  
+  VariavelListState(Etapa etapa){
+    this.etapa = etapa;
   }
-
-  List<Talhao> talhaos;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: talhaoListItems(),
+      body: variavelListItems(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          navegarFormularioTalhao(Talhao(), this.fazenda);
         },
-        tooltip: "Adicionar novo talhão",
+        tooltip: "Adicionar",
         child: new Icon(Icons.add),
         backgroundColor: Color(0xFFFFCC00),
       ),
     );
   }
 
-  FutureBuilder talhaoListItems() {
+  FutureBuilder variavelListItems() {
     return FutureBuilder(
-        future: talhoesFazenda(), 
+        future: variavelsAplicativo(), 
         builder: (context, dados) {
           var connectionState = dados.connectionState;
           if (connectionState == ConnectionState.none ||
@@ -49,7 +45,7 @@ class TalhaoListState extends State {
             return Container(
               height: 200.0,
               alignment: Alignment.center,
-              child: Text('Nenhum talhão encontrado',
+              child: Text('Nenhum variavel encontrado',
                   style: TextStyle(color: Colors.black, fontSize: 16.0)),
             );
           } else if (dados.connectionState == ConnectionState.waiting) {
@@ -89,7 +85,7 @@ class TalhaoListState extends State {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      Text(dados.data[position].identificadorDoTalhao),
+                                      Text(dados.data[position].identificadorDoVariavel),
                                     ],
                                   ),
                                   Row(
@@ -102,24 +98,22 @@ class TalhaoListState extends State {
                                               icon: Icon(Icons.edit),
                                               label: Text('Editar'),
                                               onPressed: () {
-                                                navegarFormularioTalhao(
-                                                    dados.data[position],
-                                                    this.fazenda);
+                                          
                                               })
                                         ],
                                       ),
-                                      Column(
-                                        children: <Widget>[
-                                          FlatButton.icon(
-                                              color: Colors.white10,
-                                              icon: Icon(Icons.layers),
-                                              label: Text('Variaveis'),
-                                              onPressed: () {
-                                                navegarPaginaVariavel(
-                                                    dados.data[position]);
-                                              })
-                                        ],
-                                      ),
+                                      // Column(
+                                      //   children: <Widget>[
+                                      //     FlatButton.icon(
+                                      //         color: Colors.white10,
+                                      //         icon: Icon(Icons.layers),
+                                      //         label: Text('Variaveis'),
+                                      //         onPressed: () {
+                                      //           navegarPaginaVariavel(
+                                      //               dados.data[position]);
+                                      //         })
+                                      //   ],
+                                      // ),
                                     ],
                                   )
                                 ],
@@ -134,7 +128,7 @@ class TalhaoListState extends State {
         });
   }
 
-  talhoesFazenda() async {
+  variavelsAplicativo() async {
     final AuthTableModel authTableModel = new AuthTableModel();
     final List<dynamic> auths = await authTableModel.getAuths();
 
@@ -143,31 +137,30 @@ class TalhaoListState extends State {
     String token = auths[0]['id'];
     String url = enviroment['apiUrl'] +
         '/fazendas/' +
-        this.fazenda.id +
         '/talhoes?access_token=' +
         token;
 
     var response = await Dio().get(url);
 
     List<dynamic> talhoes = new List<dynamic>();
-    Talhao talhao = new Talhao();
-    response.data.forEach((element) => talhoes.add(talhao.fromMap(element)));
+    Variavel variavel = new Variavel();
+    response.data.forEach((element) => talhoes.add(variavel.fromMap(element)));
     return talhoes;
   }
 
-  void _confirmarExclusao(Talhao talhao) {
+  void _confirmarExclusao(Variavel variavel) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Apagar talhão"),
-          content: new Text("Você realmente deseja apagar esta talhão?"),
+          title: new Text("Apagar variavel"),
+          content: new Text("Você realmente deseja apagar esta variavel?"),
           actions: <Widget>[
             new FlatButton(
               child: new Text("Apagar"),
               textColor: Colors.red,
               onPressed: () {
-                deletarTalhao(talhao);
+                deletarVariavel(variavel);
               },
             ),
             new FlatButton(
@@ -183,10 +176,10 @@ class TalhaoListState extends State {
     );
   }
 
-  void deletarTalhao(Talhao talhao) async {
+  void deletarVariavel(Variavel variavel) async {
     Navigator.pop(context, true);
 
-    if (talhao.id == null) {
+    if (variavel.id == null) {
       return;
     }
 
@@ -196,13 +189,11 @@ class TalhaoListState extends State {
     Map enviroment = environment();
 
     String token     = auths[0]['id'];
-    String idFazenda = this.fazenda.id;
-    String idTalhao  = talhao.id;
+    String idVariavel  = variavel.id;
     String url       = enviroment['apiUrl'] +
         '/fazendas/' +
-        idFazenda +
         '/talhoes/' +
-        idTalhao +
+        idVariavel +
         '?access_token=' +
         token;
 
@@ -211,12 +202,12 @@ class TalhaoListState extends State {
 
     if (response.statusCode == 204 || response.statusCode == 200) {
       AlertDialog alertDialog = AlertDialog(
-        title: Text("Talhão deletado"),
-        content: Text("O talhão foi deletado"),
+        title: Text("Variavel deletado"),
+        content: Text("O variavel foi deletado"),
       );
       showDialog(context: context, builder: (_) => alertDialog);
       setState(() {
-        talhaoListItems();
+        variavelListItems();
       });
     } else {
       AlertDialog alertDialog = AlertDialog(
@@ -227,18 +218,18 @@ class TalhaoListState extends State {
     }
   }
 
-  void navegarFormularioTalhao(Talhao talhao, Fazenda fazenda) async {
-    bool result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => TalhaoForm(talhao, fazenda)),
-    );
-    if (result == true) {}
+  void navegarFormularioVariavel(Variavel variavel) async {
+    // bool result = await Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => VariavelForm(variavel)),
+    // );
+    // if (result == true) {}
   }
 
-  void navegarPaginaVariavel(Talhao talhao) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => VariavelPage(talhao)),
-    );
-  }
+  // void navegarPaginaVariavel(Variavel variavel) {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => VariavelPage(variavel)),
+  //   );
+  // }
 }

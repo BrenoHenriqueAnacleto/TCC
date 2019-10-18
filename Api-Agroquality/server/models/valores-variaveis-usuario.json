@@ -1,0 +1,24 @@
+{
+  "name": "valoresVariaveisUsuario",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "periodo": {
+      "type": "string",
+      "required": true
+    },
+    "valores": {
+      "type": [
+        "object"
+      ],
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

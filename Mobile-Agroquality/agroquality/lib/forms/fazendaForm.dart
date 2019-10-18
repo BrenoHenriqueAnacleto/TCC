@@ -25,18 +25,18 @@ class FazendaFormState extends State {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   FazendaFormState(Fazenda fazenda) {
-    
+
     this.fazenda = fazenda; 
 
     if (this.fazenda.id != null){
         _titulo = "Editar Fazenda";
         _botao  = "Salvar alterações";
-        nomeController.text = this.fazenda.nome;
+        nomeController.text          = this.fazenda.nome;
         areaDaFazendaController.text = this.fazenda.areaDaFazenda.toString();
     } else {
         _titulo = "Nova Fazenda";
         _botao  = "Adicionar fazenda";
-        nomeController.text = "";
+        nomeController.text          = "";
         areaDaFazendaController.text = "";
     }
   }
@@ -85,7 +85,7 @@ class FazendaFormState extends State {
                         keyboardType: TextInputType.number,
                         controller: areaDaFazendaController,
                         decoration: InputDecoration(
-                            labelText: "Area da fazenda (ha)",
+                            labelText: "Área da fazenda (ha)",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0),
                             )
