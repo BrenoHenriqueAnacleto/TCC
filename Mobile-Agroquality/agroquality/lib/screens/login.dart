@@ -112,6 +112,7 @@ class _LoginPageState extends State<LoginPage> {
     var response = await Dio().post(url,data: dados);
     auth.fromMap(response.data);
     sessaoFlutter(auth);
+
     if (response.statusCode == 200) {
       Navigator.pop(context);
     } else {

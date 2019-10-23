@@ -71,130 +71,130 @@ class _DashboardPageState extends State<DashboardPage> {
                   mainAxisSpacing: 10,
                   crossAxisCount: 2,
                   children: <Widget>[
-                    // Card(
-                    //   elevation: 6,
-                    //   child:Center(
-                    //     child: Padding(
-                    //       padding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 20.0),
-                    //         child: Column(
-                    //           children: <Widget>[
-                    //             Icon(WeatherIcons.getIconData("wi_strong_wind"),size: 60.0),
-                    //             Divider(color: Colors.transparent),
-                    //             Row(
-                    //               crossAxisAlignment: CrossAxisAlignment.center,
-                    //               mainAxisAlignment: MainAxisAlignment.center,
-                    //               children: <Widget>[
-                    //               Text('Velocidade do vento',
-                    //               style: TextStyle(color: Colors.black,fontSize: 16.0)
-                    //               ),
-                    //             ]),
-                    //             Row(
-                    //               crossAxisAlignment: CrossAxisAlignment.center,
-                    //               mainAxisAlignment: MainAxisAlignment.center,
-                    //               children: <Widget>[
-                    //               Text(format(snapshot.data.windSpeed * 3.6) + ' km/h',
-                    //               style: TextStyle(color: Colors.black,fontSize: 20.0)
-                    //               ),
-                    //             ])
+                    Card(
+                      elevation: 6,
+                      child:Center(
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 20.0),
+                            child: Column(
+                              children: <Widget>[
+                                // Icon(WeatherIcons.getIconData("wi_strong_wind"),size: 60.0),
+                                Divider(color: Colors.transparent),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                  Text('Velocidade do vento',
+                                  style: TextStyle(color: Colors.black,fontSize: 16.0)
+                                  ),
+                                ]),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                  Text(format(snapshot.data.windSpeed * 3.6) + ' km/h',
+                                  style: TextStyle(color: Colors.black,fontSize: 20.0)
+                                  ),
+                                ])
                                   
-                    //           ],
-                    //         )     
-                    //       )
-                    //     )
-                    // ),
-                    // Card(
-                    //   elevation: 6,
-                    //   child:Center(
-                    //     child: Padding(
-                    //       padding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 20.0),
-                    //         child: Column(
-                    //           children: <Widget>[
-                    //             Icon(WeatherIcons.getIconData("wi_thermometer"),size: 60.0),
-                    //             Divider(color: Colors.transparent),
-                    //             Row(
-                    //               crossAxisAlignment: CrossAxisAlignment.center,
-                    //               mainAxisAlignment: MainAxisAlignment.center,
-                    //               children: <Widget>[
-                    //               Text('Temperatura',
-                    //               style: TextStyle(color: Colors.black,fontSize: 16.0)
-                    //               ),
-                    //             ]),
-                    //             Row(
-                    //               crossAxisAlignment: CrossAxisAlignment.center,
-                    //               mainAxisAlignment: MainAxisAlignment.center,
-                    //               children: <Widget>[
-                    //               Text(format(snapshot.data.temperature.celsius).toString() + ' °C',
-                    //               style: TextStyle(color: Colors.black,fontSize: 20.0)
-                    //               ),  
-                    //             ])
+                              ],
+                            )     
+                          )
+                        )
+                    ),
+                    Card(
+                      elevation: 6,
+                      child:Center(
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 20.0),
+                            child: Column(
+                              children: <Widget>[
+                                // Icon(WeatherIcons.getIconData("wi_thermometer"),size: 60.0),
+                                Divider(color: Colors.transparent),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                  Text('Temperatura',
+                                  style: TextStyle(color: Colors.black,fontSize: 16.0)
+                                  ),
+                                ]),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                  Text(format(snapshot.data.temperature.celsius).toString() + ' °C',
+                                  style: TextStyle(color: Colors.black,fontSize: 20.0)
+                                  ),  
+                                ])
                                   
-                    //           ],
-                    //         )     
-                    //       )
-                    //     )
-                    // ),
-                    // Card(
-                    //   elevation: 6,
-                    //   child:Center(
-                    //     child: Padding(
-                    //       padding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 20.0),
-                    //         child: Column(
-                    //           children: <Widget>[
-                    //             Icon(WeatherIcons.getIconData("wi_barometer"),size: 60.0),
-                    //             Divider(color: Colors.transparent),
-                    //             Row(
-                    //               crossAxisAlignment: CrossAxisAlignment.center,
-                    //               mainAxisAlignment: MainAxisAlignment.center,
-                    //               children: <Widget>[
-                    //               Text('Pressão',
-                    //               style: TextStyle(color: Colors.black,fontSize: 16.0)
-                    //               ),
-                    //             ]),
-                    //             Row(
-                    //               crossAxisAlignment: CrossAxisAlignment.center,
-                    //               mainAxisAlignment: MainAxisAlignment.center,
-                    //               children: <Widget>[
-                    //               Text(format(snapshot.data.pressure).toString() + ' hPa',
-                    //               style: TextStyle(color: Colors.black,fontSize: 20.0)
-                    //               ),  
-                    //             ])
+                              ],
+                            )     
+                          )
+                        )
+                    ),
+                    Card(
+                      elevation: 6,
+                      child:Center(
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 20.0),
+                            child: Column(
+                              children: <Widget>[
+                                // Icon(WeatherIcons.getIconData("wi_barometer"),size: 60.0),
+                                Divider(color: Colors.transparent),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                  Text('Pressão',
+                                  style: TextStyle(color: Colors.black,fontSize: 16.0)
+                                  ),
+                                ]),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                  Text(format(snapshot.data.pressure).toString() + ' hPa',
+                                  style: TextStyle(color: Colors.black,fontSize: 20.0)
+                                  ),  
+                                ])
                                   
-                    //           ],
-                    //         )     
-                    //       )
-                    //     )
-                    // ),
-                    //  Card(
-                    //   elevation: 6,
-                    //   child:Center(
-                    //     child: Padding(
-                    //       padding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 20.0),
-                    //         child: Column(
-                    //           children: <Widget>[
-                    //             Icon(WeatherIcons.getIconData("wi_humidity"),size: 60.0),
-                    //             Divider(color: Colors.transparent),
-                    //             Row(
-                    //               crossAxisAlignment: CrossAxisAlignment.center,
-                    //               mainAxisAlignment: MainAxisAlignment.center,
-                    //               children: <Widget>[
-                    //               Text('Umidade',
-                    //               style: TextStyle(color: Colors.black,fontSize: 16.0)
-                    //               ),
-                    //             ]),
-                    //             Row(
-                    //               crossAxisAlignment: CrossAxisAlignment.center,
-                    //               mainAxisAlignment: MainAxisAlignment.center,
-                    //               children: <Widget>[
-                    //               Text(snapshot.data.humidity.toString() +'%',
-                    //               style: TextStyle(color: Colors.black,fontSize: 20.0)
-                    //               ),  
-                    //             ])
+                              ],
+                            )     
+                          )
+                        )
+                    ),
+                     Card(
+                      elevation: 6,
+                      child:Center(
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 20.0),
+                            child: Column(
+                              children: <Widget>[
+                                // Icon(WeatherIcons.getIconData("wi_humidity"),size: 60.0),
+                                Divider(color: Colors.transparent),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                  Text('Umidade',
+                                  style: TextStyle(color: Colors.black,fontSize: 16.0)
+                                  ),
+                                ]),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                  Text(snapshot.data.humidity.toString() +'%',
+                                  style: TextStyle(color: Colors.black,fontSize: 20.0)
+                                  ),  
+                                ])
                                   
-                    //           ],
-                    //         )     
-                    //       )
-                    //     )
-                    // ),
+                              ],
+                            )     
+                          )
+                        )
+                    ),
                   ]);
               },
             )

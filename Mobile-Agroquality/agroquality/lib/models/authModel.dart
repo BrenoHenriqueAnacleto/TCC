@@ -45,4 +45,15 @@ class Auth {
     this.userId   = obj["userId"];
     this.role     = obj["role"];
   }
+
+   Auth novo(Map<String, dynamic> mapa) {
+
+    Auth auth = new Auth();
+
+      auth.username = mapa['username'];
+      auth.id       = mapa['id'];
+      auth.userId   = mapa['userId'];
+      auth.role     = mapa['role'];
+    return auth;
+  }
 }

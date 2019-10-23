@@ -5,7 +5,7 @@ var app = require('../server');
 var loopback = require('loopback');
 
 var frontendUrl = 'http://localhost:4200';
-var backEndUrl  = 'http://localhost:3000';
+var backEndUrl  = 'http://192.168.0.104:3000';
 
 module.exports = function(Usuario) {
 
@@ -25,7 +25,7 @@ module.exports = function(Usuario) {
             to: user.email,
             from: 'sistema.agroquality@gmail.com',
             subject:'Obrigado por se cadastrar',
-            host: 'localhost',
+            host: '192.168.0.104',
             template: path.resolve(__dirname,'../boot/views/verify.ejs'),
             user:user,
             verifyHref: verifyLink
@@ -203,7 +203,6 @@ module.exports = function(Usuario) {
     Usuario.removerAdministrador = function(id, callback) {
         var msg;
         msg = 'Administrador excluido com sucesso.';
-        console.log(id);
         Usuario.findById(id,function (err,administrador) {
 
             if (!err && administrador != null) {

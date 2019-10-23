@@ -1,6 +1,7 @@
 import 'package:agroquality/models/etapaModel.dart';
 import 'package:agroquality/models/talhaoModel.dart';
 import 'package:agroquality/tableModels/authTableModel.dart';
+import 'package:agroquality/widgets/variavelList.dart';
 import 'package:flutter/material.dart';
 import 'package:agroquality/constants.dart';
 import 'package:dio/dio.dart';
@@ -25,9 +26,8 @@ class VariavelPageState extends State {
     return FutureBuilder(
       future: etapasAplicativo(),
       builder: (context, dados) {
-        if (dados.connectionState == ConnectionState.none ||
-              dados.data == null) {
-          return Container(
+        if (dados.connectionState == ConnectionState.none) {
+            return Container(
               height: 200.0,
               color: Colors.white,
               alignment: Alignment.center,
@@ -44,9 +44,18 @@ class VariavelPageState extends State {
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
               ),
             );
+        } else if (dados.data == null) {
+          return Container(
+              height: 200.0,
+              color: Colors.white,
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+              ),
+            );
         } else {
           return DefaultTabController(
-            length: dados.data.length,
+            length: dados.data[0].length,
             child: Scaffold(
               appBar: AppBar(
                 title:Text('Etapas'),
@@ -54,10 +63,10 @@ class VariavelPageState extends State {
                 bottom: 
                 TabBar(
                 indicatorColor: Color(0xFFFFFBFA),
-                tabs: dados.data
+                tabs: dados.data[0]
                 )
               ),
-              body: Container()
+              body: dados.data[1]
           ));
         }
       }
@@ -87,12 +96,26 @@ class VariavelPageState extends State {
     response.data.forEach((element) => etapas.add(etapa.fromMap(element)));
 
     List<Tab> tabs = new List<Tab>();
-    List<TabBarView> tabsViews = new List<TabBarView>();
-  
-    etapas.forEach((valor) => tabs.add(new Tab(text: valor.nome)));
-    
-    // etapas.forEach((valor) => tabsViews.add());
 
-    return tabs;
+    List<VariavelList>  listas = new List<VariavelList>();
+    etapas.forEach((valor) => tabs.add(new Tab(text: valor.nome)));
+    etapas.forEach((valor) => listas.add(new VariavelList(valor)));
+
+    TabBarView tabsView = new TabBarView(children: listas);
+    List<dynamic> dados = new List<dynamic>();
+
+    if(tabsView != null){
+      dados.add(tabs);
+    }else{
+      dados.add([]);
+    }
+
+    if(tabsView != null){
+      dados.add(tabsView);
+    }else{
+      dados.add([]);
+    }
+
+    return dados;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:agroquality/screens/dashboard.dart';
 import 'package:agroquality/screens/fazenda.dart';
+import 'package:agroquality/screens/sobre.dart';
 import 'package:agroquality/widgets/customDrawer.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +32,7 @@ class HomePage extends StatelessWidget {
             centerTitle: true,
           ),
           drawer: CustomDrawer(_pageController),
-          body: FazendaPage(),
+          body: SobrePage(),
         ),
       ]
     );

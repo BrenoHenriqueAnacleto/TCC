@@ -1,4 +1,6 @@
+import 'package:agroquality/forms/variavelForm.dart';
 import 'package:agroquality/models/etapaModel.dart';
+import 'package:agroquality/models/valorModel.dart';
 import 'package:agroquality/models/variavelModel.dart';
 import 'package:agroquality/tableModels/authTableModel.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +18,10 @@ class VariavelList extends StatefulWidget {
 class VariavelListState extends State {
 
   Etapa  etapa; 
-  
+  String _etapaNome;
   VariavelListState(Etapa etapa){
     this.etapa = etapa;
+    _etapaNome = etapa.nome.toLowerCase();
   }
 
   @override
@@ -27,8 +30,9 @@ class VariavelListState extends State {
       body: variavelListItems(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          navegarFormularioVariavel(this.etapa, new Valor());
         },
-        tooltip: "Adicionar",
+        tooltip: "Adicionar variável de $_etapaNome",
         child: new Icon(Icons.add),
         backgroundColor: Color(0xFFFFCC00),
       ),
@@ -37,24 +41,17 @@ class VariavelListState extends State {
 
   FutureBuilder variavelListItems() {
     return FutureBuilder(
-        future: variavelsAplicativo(), 
+        future: variaveisEtapas(), 
         builder: (context, dados) {
           var connectionState = dados.connectionState;
-          if (connectionState == ConnectionState.none ||
-              dados.data == null) {
+          if (connectionState == ConnectionState.none) { 
             return Container(
-              height: 200.0,
-              alignment: Alignment.center,
-              child: Text('Nenhum variavel encontrado',
-                  style: TextStyle(color: Colors.black, fontSize: 16.0)),
             );
           } else if (dados.connectionState == ConnectionState.waiting) {
             return Container(
-              height: 200.0,
-              alignment: Alignment.center,
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-              ),
+            );
+          } else if (dados.data == null) {
+            return Container(
             );
           } else {
             return ListView.builder(
@@ -85,7 +82,7 @@ class VariavelListState extends State {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      Text(dados.data[position].identificadorDoVariavel),
+                                      Text(dados.data[position].periodo),
                                     ],
                                   ),
                                   Row(
@@ -98,7 +95,7 @@ class VariavelListState extends State {
                                               icon: Icon(Icons.edit),
                                               label: Text('Editar'),
                                               onPressed: () {
-                                          
+                                                navegarFormularioVariavel(this.etapa,dados.data[position]);
                                               })
                                         ],
                                       ),
@@ -128,39 +125,46 @@ class VariavelListState extends State {
         });
   }
 
-  variavelsAplicativo() async {
+  variaveisEtapas() async {
+
     final AuthTableModel authTableModel = new AuthTableModel();
     final List<dynamic> auths = await authTableModel.getAuths();
 
-    Map enviroment = environment();
-
-    String token = auths[0]['id'];
+  Map enviroment = environment();
+    String token   = auths[0]['id'];
+    String userId  = auths[0]['userId'];
+    String etapaId = this.etapa.id;
     String url = enviroment['apiUrl'] +
-        '/fazendas/' +
-        '/talhoes?access_token=' +
-        token;
+        '/valoresVariaveisUsuarios/listagemValoresEtapaUsuario'
+        + '?access_token=$token'
+        + '&usuarioId=$userId' 
+        + '&etapaId=$etapaId';
 
     var response = await Dio().get(url);
-
-    List<dynamic> talhoes = new List<dynamic>();
-    Variavel variavel = new Variavel();
-    response.data.forEach((element) => talhoes.add(variavel.fromMap(element)));
-    return talhoes;
+   
+    List<dynamic> valores = new List<dynamic>();
+    Valor valor = new Valor();
+    if(response.data['valores'] != null){
+      
+      response.data['valores'].forEach((element) => valores.add(valor.fromMap(element)));
+    }
+    return valores;
   }
 
-  void _confirmarExclusao(Variavel variavel) {
+  void _confirmarExclusao(Valor valor) {
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Apagar variavel"),
-          content: new Text("Você realmente deseja apagar esta variavel?"),
+          title: new Text("Apagar valor"),
+          content: new Text("Você realmente deseja apagar este valor?"),
           actions: <Widget>[
             new FlatButton(
               child: new Text("Apagar"),
               textColor: Colors.red,
               onPressed: () {
-                deletarVariavel(variavel);
+                deletarVariavel(valor);
               },
             ),
             new FlatButton(
@@ -176,10 +180,10 @@ class VariavelListState extends State {
     );
   }
 
-  void deletarVariavel(Variavel variavel) async {
+  void deletarVariavel(Valor valor) async {
     Navigator.pop(context, true);
 
-    if (variavel.id == null) {
+    if (valor.id == null) {
       return;
     }
 
@@ -188,22 +192,20 @@ class VariavelListState extends State {
 
     Map enviroment = environment();
 
-    String token     = auths[0]['id'];
-    String idVariavel  = variavel.id;
-    String url       = enviroment['apiUrl'] +
-        '/fazendas/' +
-        '/talhoes/' +
-        idVariavel +
-        '?access_token=' +
-        token;
+    String token   = auths[0]['id'];
+    String idValor = valor.id;
+    String url     = enviroment['apiUrl'] +
+        '/valoresVariaveisUsuarios/exclusaoValor' +
+        '?access_token=$token' +
+        '&idValor=$idValor';
 
     var dio = Dio();
     var response = await dio.delete(url);
 
     if (response.statusCode == 204 || response.statusCode == 200) {
       AlertDialog alertDialog = AlertDialog(
-        title: Text("Variavel deletado"),
-        content: Text("O variavel foi deletado"),
+        title: Text("Valor deletado"),
+        content: Text("O valor foi deletado"),
       );
       showDialog(context: context, builder: (_) => alertDialog);
       setState(() {
@@ -218,12 +220,12 @@ class VariavelListState extends State {
     }
   }
 
-  void navegarFormularioVariavel(Variavel variavel) async {
-    // bool result = await Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => VariavelForm(variavel)),
-    // );
-    // if (result == true) {}
+  void navegarFormularioVariavel(Etapa etapa, Valor valor) async {
+    bool result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => VariavelForm(etapa,valor)),
+    );
+    if (result == true) {}
   }
 
   // void navegarPaginaVariavel(Variavel variavel) {

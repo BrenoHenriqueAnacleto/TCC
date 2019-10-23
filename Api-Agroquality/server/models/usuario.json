@@ -45,6 +45,11 @@
       "type": "hasMany",
       "model": "fazenda",
       "foreignKey": ""
+    },
+    "valoresVariaveisUsuario": {
+      "type": "hasMany",
+      "model": "valoresVariaveisUsuario",
+      "foreignKey": ""
     }
   },
   "acls": [

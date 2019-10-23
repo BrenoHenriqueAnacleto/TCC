@@ -7,18 +7,77 @@
   },
   "properties": {
     "periodo": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "valores": {
       "type": [
         "object"
       ],
       "required": true
+    },
+    "excluido": {
+      "type": "boolean"
     }
   },
   "validations": [],
   "relations": {},
   "acls": [],
-  "methods": {}
+  "methods": {
+    "listagemValoresEtapaUsuario": {
+      "accepts": [
+        {
+          "arg": "usuarioId",
+          "type": "string",
+          "required": true,
+          "description": "O id do usuario que realizou a requisição"
+        },
+        {
+          "arg": "etapaId",
+          "type": "string",
+          "required": true,
+          "description": "O id da etapa que será utilizado na listagem"
+        }
+      ],
+      "returns": [
+        {
+          "arg": "valores",
+          "type": "array",
+          "root": false,
+          "description": "Os valores das etapas de um usuario"
+        }
+      ],
+      "description": "Retorna os valores de acordo com os parametros passados",
+      "http": [
+        {
+          "path": "/listagemValoresEtapaUsuario",
+          "verb": "get"
+        }
+      ]
+    },
+    "exclusaoValor": {
+      "accepts": [
+        {
+          "arg": "idValor",
+          "type": "string",
+          "required": true,
+          "description": "O id do valor que será \"excluido\""
+        }
+      ],
+      "returns": [
+        {
+          "arg": "resp",
+          "type": "string",
+          "root": false,
+          "description": ""
+        }
+      ],
+      "description": "Exclusão logica do valor",
+      "http": [
+        {
+          "path": "/exclusaoValor",
+          "verb": "delete"
+        }
+      ]
+    }
+  }
 }

@@ -34,21 +34,28 @@ class FazendaListState extends State {
     return FutureBuilder(
         future: fazendasUsuario(),
         builder: (context, dados) {
-          if (dados.connectionState == ConnectionState.none ||
-              dados.data == null) {
+          var connectionState = dados.connectionState;
+          if (connectionState == ConnectionState.none) {
             return Container(
               height: 200.0,
               alignment: Alignment.center,
-              child: Text('Nenhuma fazenda encontrada',
+              child: Text('Erro :(',
                   style: TextStyle(color: Colors.black, fontSize: 16.0)),
             );
-          } else if (dados.connectionState == ConnectionState.waiting) {
+          } else if (connectionState == ConnectionState.waiting) {
             return Container(
               height: 200.0,
               alignment: Alignment.center,
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
               ),
+            );
+          } else if(dados.data == null){
+            return Container(
+              height: 200.0,
+              alignment: Alignment.center,
+              child: Text('Nenhuma fazenda encontrada',
+                  style: TextStyle(color: Colors.black, fontSize: 16.0)),
             );
           } else {
             return ListView.builder(
