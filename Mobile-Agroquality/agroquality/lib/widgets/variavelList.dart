@@ -1,7 +1,8 @@
 import 'package:agroquality/forms/variavelForm.dart';
 import 'package:agroquality/models/etapaModel.dart';
+import 'package:agroquality/models/talhaoModel.dart';
 import 'package:agroquality/models/valorModel.dart';
-import 'package:agroquality/models/variavelModel.dart';
+import 'package:agroquality/screens/resultado.dart';
 import 'package:agroquality/tableModels/authTableModel.dart';
 import 'package:flutter/material.dart';
 
@@ -9,19 +10,22 @@ import 'package:agroquality/constants.dart';
 import 'package:dio/dio.dart';
 
 class VariavelList extends StatefulWidget {
+  final Talhao talhao;
   final Etapa etapa;
-  VariavelList(this.etapa);
+  VariavelList(this.talhao,this.etapa);
   @override
-  State<StatefulWidget> createState() => VariavelListState(etapa);
+  State<StatefulWidget> createState() => VariavelListState(talhao,etapa);
 }
 
 class VariavelListState extends State {
 
   Etapa  etapa; 
+  Talhao talhao;
   String _etapaNome;
-  VariavelListState(Etapa etapa){
-    this.etapa = etapa;
-    _etapaNome = etapa.nome.toLowerCase();
+  VariavelListState(Talhao talhao, Etapa etapa){
+    this.etapa  = etapa;
+    this.talhao = talhao;
+    _etapaNome  = etapa.nome.toLowerCase();
   }
 
   @override
@@ -30,7 +34,7 @@ class VariavelListState extends State {
       body: variavelListItems(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          navegarFormularioVariavel(this.etapa, new Valor());
+          navegarFormularioVariavel(this.talhao,this.etapa, new Valor());
         },
         tooltip: "Adicionar variável de $_etapaNome",
         child: new Icon(Icons.add),
@@ -82,7 +86,7 @@ class VariavelListState extends State {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      Text(dados.data[position].periodo),
+                                      Text("Valores obtidos em: " + dados.data[position].periodo),
                                     ],
                                   ),
                                   Row(
@@ -95,22 +99,21 @@ class VariavelListState extends State {
                                               icon: Icon(Icons.edit),
                                               label: Text('Editar'),
                                               onPressed: () {
-                                                navegarFormularioVariavel(this.etapa,dados.data[position]);
+                                                navegarFormularioVariavel(this.talhao,this.etapa,dados.data[position]);
                                               })
                                         ],
                                       ),
-                                      // Column(
-                                      //   children: <Widget>[
-                                      //     FlatButton.icon(
-                                      //         color: Colors.white10,
-                                      //         icon: Icon(Icons.layers),
-                                      //         label: Text('Variaveis'),
-                                      //         onPressed: () {
-                                      //           navegarPaginaVariavel(
-                                      //               dados.data[position]);
-                                      //         })
-                                      //   ],
-                                      // ),
+                                      Row(
+                                        children: <Widget>[
+                                          FlatButton.icon(
+                                              color: Colors.white10,
+                                              icon: Icon(Icons.pie_chart),
+                                              label: Text('Resultados'),
+                                              onPressed: () {
+                                                navegarResultado(this.talhao,this.etapa,dados.data[position]);
+                                              })
+                                        ],
+                                      )
                                     ],
                                   )
                                 ],
@@ -130,7 +133,7 @@ class VariavelListState extends State {
     final AuthTableModel authTableModel = new AuthTableModel();
     final List<dynamic> auths = await authTableModel.getAuths();
 
-  Map enviroment = environment();
+    Map enviroment = environment();
     String token   = auths[0]['id'];
     String userId  = auths[0]['userId'];
     String etapaId = this.etapa.id;
@@ -181,6 +184,7 @@ class VariavelListState extends State {
   }
 
   void deletarVariavel(Valor valor) async {
+
     Navigator.pop(context, true);
 
     if (valor.id == null) {
@@ -220,18 +224,20 @@ class VariavelListState extends State {
     }
   }
 
-  void navegarFormularioVariavel(Etapa etapa, Valor valor) async {
+  void navegarFormularioVariavel(Talhao talhao,Etapa etapa, Valor valor) async {
     bool result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => VariavelForm(etapa,valor)),
+      MaterialPageRoute(builder: (context) => VariavelForm(talhao,etapa,valor)),
     );
     if (result == true) {}
   }
 
-  // void navegarPaginaVariavel(Variavel variavel) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(builder: (context) => VariavelPage(variavel)),
-  //   );
-  // }
+  void navegarResultado(Talhao talhao,Etapa etapa, Valor valor) async {
+    bool result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ResultadoPage(talhao,etapa,valor)),
+    );
+    if (result == true) {}
+  }
+
 }

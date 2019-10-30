@@ -1,4 +1,6 @@
+import 'package:agroquality/screens/home.dart';
 import 'package:agroquality/screens/login.dart';
+import 'package:agroquality/tableModels/authTableModel.dart';
 import 'package:flutter/material.dart';
 import 'package:splashscreen/splashscreen.dart';
 
@@ -42,3 +44,15 @@ Widget _introScreen() {
     ],
   );
 }
+
+ usuarioAutenticado() async {
+
+    final AuthTableModel authTableModel = new AuthTableModel();
+    final List<dynamic> auths = await authTableModel.getAuths();
+
+    if(auths[0] != null){
+      return HomePage();
+    } else {
+      return LoginPage();
+    }
+  }

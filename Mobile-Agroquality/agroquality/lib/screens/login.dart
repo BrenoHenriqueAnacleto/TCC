@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:agroquality/screens/cadastro.dart';
+import 'package:agroquality/forms/usuarioForm.dart';
 import 'package:agroquality/models/usuarioModel.dart';
 import 'package:agroquality/models/authModel.dart';
 import 'package:agroquality/tableModels/authTableModel.dart';
@@ -74,17 +74,17 @@ class _LoginPageState extends State<LoginPage> {
                 );
               },
             ),
-            FlatButton(
-              child: Text('Redefinir senha'),
-              onPressed: () {
-              },
-            ),
-            FlatButton(
-              child: Text('Entrar como visitante'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
+            // FlatButton(
+            //   child: Text('Redefinir senha'),
+            //   onPressed: () {
+            //   },
+            // ),
+            // FlatButton(
+            //   child: Text('Entrar como visitante'),
+            //   onPressed: () {
+            //     Navigator.pop(context);
+            //   },
+            // ),
           ],
         ),
       ),
@@ -108,13 +108,22 @@ class _LoginPageState extends State<LoginPage> {
         }
       }
     ''';
+
     var dados    = convert.jsonDecode(jsonString);
-    var response = await Dio().post(url,data: dados);
-    auth.fromMap(response.data);
-    sessaoFlutter(auth);
+
+    var response = await Dio().post(url,data: dados, options: Options(
+      followRedirects: false,
+      validateStatus: (status) {
+        return status < 500;
+      } 
+    ));
 
     if (response.statusCode == 200) {
+
+      auth.fromMap(response.data);
+      sessaoFlutter(auth);
       Navigator.pop(context);
+
     } else {
       _autenticacaoInvalida(response);
     }

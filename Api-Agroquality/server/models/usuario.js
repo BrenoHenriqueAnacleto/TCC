@@ -5,7 +5,7 @@ var app = require('../server');
 var loopback = require('loopback');
 
 var frontendUrl = 'http://localhost:4200';
-var backEndUrl  = 'http://192.168.0.104:3000';
+var backEndUrl  = 'http://192.168.0.107:3000';
 
 module.exports = function(Usuario) {
 
@@ -25,7 +25,7 @@ module.exports = function(Usuario) {
             to: user.email,
             from: 'sistema.agroquality@gmail.com',
             subject:'Obrigado por se cadastrar',
-            host: '192.168.0.104',
+            host: '192.168.0.107',
             template: path.resolve(__dirname,'../boot/views/verify.ejs'),
             user:user,
             verifyHref: verifyLink
@@ -416,4 +416,33 @@ module.exports = function(Usuario) {
             }
         });
     }
+
+    /**
+     * Realiza o cadastro no aplicativo
+     * @param {any} dados Os dados de cadastro do usuario
+     * @param {string} usuarioId Caso o usuario altere os seus dados
+     * @param {Function(Error, string)} callback
+     */
+
+    Usuario.remoteMethod('cadastroUsuario',{
+        accepts:[{arg:'dados', type:'any'}],
+        http:{path:'/cadastroUsuario',verb:'post'},
+        http:{path:'/cadastroUsuario',verb:'put'}
+    });
+
+    Usuario.cadastroUsuario = function(dados, callback) {
+
+        Usuario.upsert(dados.body, function(err, user){
+            console.log(err);
+            if(!err){
+                return callback(null);
+            } else {
+                var error = new Error();
+                error.status = 422;
+                error.message = "Dados invalidos";
+                return callback(error);
+            }
+        });
+    };
+
 };

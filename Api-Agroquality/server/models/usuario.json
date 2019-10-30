@@ -126,6 +126,13 @@
       "principalId": "$authenticated",
       "permission": "ALLOW",
       "property": "removerSuperUsuario"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "ALLOW",
+      "property": "cadastroUsuario"
     }
   ],
   "methods": {
@@ -252,6 +259,38 @@
         {
           "path": "/remover-superusuario",
           "verb": "delete"
+        }
+      ]
+    },
+    "cadastroUsuario": {
+      "accepts": [
+        {
+          "arg": "dados",
+          "type": "any",
+          "required": false,
+          "description": "Os dados necessarios para o cadastro no aplicativo.",
+          "http": {
+            "source": "req"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "resp",
+          "type": "string",
+          "root": false,
+          "description": "resposta do servidor"
+        }
+      ],
+      "description": "Realiza o cadastro do usuario no aplicativo.",
+      "http": [
+        {
+          "path": "/cadastroUsuario",
+          "verb": "post"
+        },
+        {
+          "path": "/cadastroUsuario",
+          "verb": "put"
         }
       ]
     }

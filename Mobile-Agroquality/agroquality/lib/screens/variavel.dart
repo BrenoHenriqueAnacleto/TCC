@@ -60,6 +60,9 @@ class VariavelPageState extends State {
               appBar: AppBar(
                 title:Text('Etapas'),
                 centerTitle: true,
+                primary: true,
+                toolbarOpacity: 1.0,
+                bottomOpacity: 1.0,
                 bottom: 
                 TabBar(
                 indicatorColor: Color(0xFFFFFBFA),
@@ -99,7 +102,7 @@ class VariavelPageState extends State {
 
     List<VariavelList>  listas = new List<VariavelList>();
     etapas.forEach((valor) => tabs.add(new Tab(text: valor.nome)));
-    etapas.forEach((valor) => listas.add(new VariavelList(valor)));
+    etapas.forEach((valor) => listas.add(new VariavelList(this.talhao,valor)));
 
     TabBarView tabsView = new TabBarView(children: listas);
     List<dynamic> dados = new List<dynamic>();

@@ -1,9 +1,15 @@
 class Usuario {
-  String nome;
-  String telefone;
+
   String senha;
+  String id;
+  String nome;
   String email;
-  int id;
+  String telefone;
+  String aplicativoId;
+  String confirmarSenha;
+  bool administrador;
+  bool superUsuario;
+  bool excluido;
 
   Usuario();
 
@@ -49,5 +55,23 @@ class Usuario {
     this.telefone = obj["telefone"];
     this.email    = obj["email"];
     this.senha    = obj["senha"];
+  }
+
+   Usuario novo(Map<String, dynamic> mapa) {
+
+    Usuario usuario = new Usuario();
+
+      usuario.nome           = mapa['nome'];
+      usuario.id             = mapa['id'];
+      usuario.confirmarSenha = mapa['confirmarSenha'];
+      usuario.email          = mapa['email'];
+      usuario.senha          = mapa['senha'];
+      usuario.telefone       = mapa['telefone'];
+      usuario.aplicativoId   = mapa['aplicativoId'];
+      usuario.administrador  = mapa['administrador'];
+      usuario.superUsuario   = mapa['superUsuario'];
+      usuario.excluido       = mapa['excluido'];
+
+    return usuario;
   }
 }

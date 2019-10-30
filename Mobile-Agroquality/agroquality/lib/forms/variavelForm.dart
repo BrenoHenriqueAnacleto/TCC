@@ -1,5 +1,6 @@
 import 'package:agroquality/models/authModel.dart';
 import 'package:agroquality/models/etapaModel.dart';
+import 'package:agroquality/models/talhaoModel.dart';
 import 'package:agroquality/models/valorModel.dart';
 import 'package:agroquality/models/variavelModel.dart';
 import 'package:agroquality/tableModels/authTableModel.dart';
@@ -11,16 +12,18 @@ import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 
 class VariavelForm extends StatefulWidget {
+  final Talhao talhao;
   final Etapa etapa;
   final Valor valor;
-  VariavelForm(this.etapa,this.valor);
+  VariavelForm(this.talhao,this.etapa,this.valor);
 
   @override
-  State<StatefulWidget> createState() => VariavelFormState(etapa,valor);
+  State<StatefulWidget> createState() => VariavelFormState(talhao,etapa,valor);
 }
 
 class VariavelFormState extends State {
   Etapa etapa;
+  Talhao talhao;
   String _titulo;
   String _botao;
   Valor valorEditar;
@@ -29,10 +32,11 @@ class VariavelFormState extends State {
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  VariavelFormState(Etapa etapa, Valor valor) {
+  VariavelFormState(Talhao talhao,Etapa etapa, Valor valor) {
 
     this.etapa        = etapa;
     this.valorEditar  = valor;
+    this.talhao       = talhao;
     
     if (this.valorEditar.id != null){
         _titulo = "Editar variável de" + etapa.nome.toLowerCase();
@@ -48,6 +52,7 @@ class VariavelFormState extends State {
     return Scaffold(
         appBar: AppBar(
           title: Text('$_titulo'),
+          centerTitle: true,
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back,
@@ -113,8 +118,10 @@ class VariavelFormState extends State {
     response.data.forEach((element) => variaveis.add(variavel.fromMap(element)));
 
     for (var x in variaveis) {
+        String title       = x.title.toString() ;
+        String placeholder = x.placeholder.toString();
+        String labelText   = "$title ($placeholder)";
 
-        String labelText = x.title.toString();
         String valorDoCampo = "";
 
         if(valorEditar.valores != null){
@@ -126,14 +133,60 @@ class VariavelFormState extends State {
           }
         }
 
+        List<dynamic> validacoes = new List<dynamic>();
+
+        if(x.validacoes?.isEmpty != true) {
+          
+          String cultura = "${this.talhao.cultura[0].toUpperCase()}${this.talhao.cultura.substring(1)}";
+          for(var validacao in x.validacoes){
+            if(validacao['cultura']?.contains(cultura) == true){
+              for (var intervalo in validacao['validacao']) {
+                validacoes.add(intervalo);
+              }
+            }else{
+              validacoes.add(validacao['validacao']);
+            }
+          }
+        }
+
         Widget campo = Padding(
           padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
           child: TextFormField(
             onSaved: (value){
+              bool qualidade = true;
+              String mensagem = "";
+              if(validacoes?.isEmpty != true){
+
+                for(var valido in validacoes){
+
+                  if(valido != null){
+
+                    if(valido['valorPadrao'] != null){
+
+                      if(double.parse(valido['valorPadrao']) != double.parse(value)){
+                        mensagem  = valido['mensagemInvalida'];
+                        qualidade = false;
+                      } else{
+                        mensagem  = valido['mensagemValida'];
+                        qualidade = true;
+                      }
+                    } else if(valido['valorMinimo'] != null && valido['valorMaximo'] != null) {
+
+                      if(double.parse(value) >= double.parse(valido['valorMinimo'])  &&  double.parse(value) <= double.parse(valido['valorMaximo'])){
+                        mensagem  = valido['mensagem'];
+                        qualidade = valido['qualidade'];
+                      }
+                    }
+                  }
+                }
+              }
+
               String id = x.id;
               String val = value.toString();
               var valor = '''{
-                  "$id": "$val"
+                  "$id": "$val",
+                  "qualidade":"$qualidade",
+                  "mensagem" : "$mensagem"
                 }
               ''';
               valores.add(valor);
@@ -145,10 +198,10 @@ class VariavelFormState extends State {
                   borderRadius: BorderRadius.circular(5.0),
                 )),
             validator: (value) {
+             
               if (value.isEmpty) {
                 return "Campo obrigatório";
               }
-              
             },
           ));
 
@@ -173,7 +226,7 @@ class VariavelFormState extends State {
           )));
       }
     return campos;
-  }
+  } 
 
   void adicionar() async {
 
