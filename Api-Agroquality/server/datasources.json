@@ -3,16 +3,6 @@
     "name": "db",
     "connector": "memory"
   },
-  "db_agroquality": {
-    "host": "localhost",
-    "port": 5432,
-    "url": "",
-    "database": "Agroquality",
-    "password": "123",
-    "name": "db_agroquality",
-    "user": "postgres",
-    "connector": "postgresql"
-  },
   "dbmongo": {
     "host": "127.0.0.1",
     "port": 27017,

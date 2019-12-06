@@ -1,5 +1,5 @@
-const String serverUrl    = 'http://192.168.0.107:3000';
-const String idAplicativo = '5d6daa5c4457df3140e61307';
+const String serverUrl    = 'https://sistema-agroquality.appspot.com';
+const String idAplicativo = '5dc468d5b2bff804d4c7c7a9';
 
 Map<String, dynamic> environment() {
 
