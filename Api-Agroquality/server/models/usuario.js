@@ -4,8 +4,8 @@ var path = require('path');
 var app = require('../server');
 var loopback = require('loopback');
 
-var frontendUrl = 'http://localhost:4200';
-var backEndUrl  = 'http://192.168.0.107:3000';
+var frontendUrl = process.env.FRONTEND_URL || 'https://localhost:4200';
+var backEndUrl  = process.env.BACKEND_URL || 'https://localhost:3000';
 
 module.exports = function(Usuario) {
 
@@ -63,8 +63,8 @@ module.exports = function(Usuario) {
                 result.verificationToken = token;
                 Usuario.upsert(result,function (err, user) {
                     var encrypt_token = '' + user.verificationToken + '&uid=' + user.id;
-                    var verifyHref = 'http://localhost:4200/resetPassword' + '?token=' + encrypt_token;
-                    var redirectLink = 'http://localhost:4200/resetPassword';
+                    var verifyHref = frontendUrl + '/resetPassword' + '?token=' + encrypt_token;
+                    var redirectLink = frontendUrl + '/resetPassword';
                     var message = {
                         username: email.user.username,
                         verifyHref:verifyHref
@@ -367,7 +367,7 @@ module.exports = function(Usuario) {
                 ctx.res.send(
                     '<div align="center">' +
                     '<h1>Este e-mail já foi confirmado</h1>'+
-                    '<a href="http://' + redirectLink+ '">Ir para o login</a>'+
+                    '<a href="' + redirectLink+ '">Ir para o login</a>'+
                     '</div>'
                 );
             } else {
