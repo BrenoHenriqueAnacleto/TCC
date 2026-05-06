@@ -1,0 +1,39 @@
+name: Mobile Build and Test
+
+on:
+  push:
+    paths:
+      - 'Mobile-Agroquality/agroquality/**'
+      - '.github/workflows/mobile-build.yml'
+  pull_request:
+    paths:
+      - 'Mobile-Agroquality/agroquality/**'
+      - '.github/workflows/mobile-build.yml'
+
+jobs:
+  flutter-checks:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Mobile-Agroquality/agroquality
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test
+
+      - name: Build APK (debug)
+        run: flutter build apk --debug

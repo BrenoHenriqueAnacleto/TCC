@@ -1,0 +1,40 @@
+name: API Security and Build
+
+on:
+  push:
+    paths:
+      - 'Api-Agroquality/**'
+      - '.github/workflows/api-security-build.yml'
+  pull_request:
+    paths:
+      - 'Api-Agroquality/**'
+      - '.github/workflows/api-security-build.yml'
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Api-Agroquality
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: Api-Agroquality/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Security audit (high+)
+        run: npm audit --audit-level=high
+
+      - name: Build smoke test
+        run: node -e "require('./server/server'); console.log('API boot file loaded successfully')"
