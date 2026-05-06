@@ -20,9 +20,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Flutter
+      - name: Setup Flutter (Dart 2 compatible)
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '1.22.6'
           channel: stable
           cache: true
 
